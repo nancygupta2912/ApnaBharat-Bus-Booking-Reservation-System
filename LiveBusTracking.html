@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Bus Tracking</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=Your_API_Key&callback=initMap" async defer></script>
+    <style>
+        #map { height: 100vh; width: 100%; }
+        .bus-info { position: absolute; top: 10px; left: 10px; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="bus-info">Live Bus Tracking</div>
+    <script>
+        let map;
+        let busMarker;
+        let busRoute = [
+            { lat: 28.6139, lng: 77.2090 },
+            { lat: 28.6200, lng: 77.2150 },
+            { lat: 28.6250, lng: 77.2200 },
+            { lat: 28.6300, lng: 77.2250 },
+            { lat: 28.6350, lng: 77.2300 }
+        ];
+        let index = 0;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: busRoute[0],
+                zoom: 14,
+            });
+            busMarker = new google.maps.Marker({
+                position: busRoute[0],
+                map: map,
+                icon: "https://maps.google.com/mapfiles/kml/shapes/bus.png"
+            });
+            moveBus();
+        }
+
+        function moveBus() {
+            setInterval(() => {
+                if (index < busRoute.length) {
+                    busMarker.setPosition(busRoute[index]);
+                    map.panTo(busRoute[index]);
+                    index++;
+                } else {
+                    index = 0;
+                }
+            }, 2000); // Move every 2 seconds
+        }
+    </script>
+</body>
+</html>
